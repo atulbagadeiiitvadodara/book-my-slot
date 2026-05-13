@@ -7,6 +7,33 @@ const router = express.Router();
 
 router.get('/google', passport.authenticate('google', { scope: ['profile', 'email'], session: false }));
 
+router.get('/google/calendar', authenticate, passport.authorize('google-calendar', {
+  scope: ['profile', 'email', 'https://www.googleapis.com/auth/calendar.events'],
+  accessType: 'offline',
+  prompt: 'consent',
+  session: false,
+}));
+
+router.get('/google/calendar/callback',
+  authenticate,
+  passport.authorize('google-calendar', {
+    session: false,
+    failureRedirect: `${process.env.FRONTEND_URL}/dashboard?calendar=failed`,
+  }),
+  async (req, res) => {
+    if (req.account?.refreshToken) {
+      req.user.googleRefreshToken = req.account.refreshToken;
+      req.user.googleCalendarEmail = req.account.email || req.user.email;
+      req.user.googleCalendarEnabled = true;
+      req.user.googleCalendarConnectedAt = new Date();
+      await req.user.save();
+      return res.redirect(`${process.env.FRONTEND_URL}/dashboard?calendar=connected`);
+    }
+
+    return res.redirect(`${process.env.FRONTEND_URL}/dashboard?calendar=missing_refresh_token`);
+  }
+);
+
 router.get('/google/callback',
   passport.authenticate('google', { session: false, failureRedirect: `${process.env.FRONTEND_URL}/login?error=auth_failed` }),
   (req, res) => {
@@ -30,7 +57,18 @@ router.get('/me', authenticate, (req, res) => {
     avatar: req.user.avatar,
     timezone: req.user.timezone,
     publicSlug: req.user.publicSlug,
+    calendarConnected: Boolean(req.user.googleCalendarEnabled && req.user.googleRefreshToken),
+    calendarEmail: req.user.googleCalendarEmail,
   });
+});
+
+router.post('/google/calendar/disconnect', authenticate, async (req, res) => {
+  req.user.googleRefreshToken = '';
+  req.user.googleCalendarEmail = '';
+  req.user.googleCalendarEnabled = false;
+  req.user.googleCalendarConnectedAt = undefined;
+  await req.user.save();
+  res.json({ message: 'Google Calendar disconnected' });
 });
 
 router.post('/logout', (req, res) => {

@@ -14,3 +14,12 @@ export const getGoogleAuthUrl = (): string => {
   const base = import.meta.env.VITE_API_BASE_URL || '/api';
   return `${base}/auth/google`;
 };
+
+export const getGoogleCalendarConnectUrl = (): string => {
+  const base = import.meta.env.VITE_API_BASE_URL || '/api';
+  return `${base}/auth/google/calendar`;
+};
+
+export const disconnectGoogleCalendar = async (): Promise<void> => {
+  await api.post('/auth/google/calendar/disconnect');
+};

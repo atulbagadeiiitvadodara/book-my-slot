@@ -6,12 +6,14 @@ import { format, parseISO, isAfter } from 'date-fns';
 import { toZonedTime } from 'date-fns-tz';
 import { Link } from 'react-router-dom';
 import { useState } from 'react';
+import { disconnectGoogleCalendar, getGoogleCalendarConnectUrl, getMe } from '../api/auth';
 
 const WEEKDAYS = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 
 export default function DashboardPage() {
-  const { user } = useAuthStore();
+  const { user, setUser } = useAuthStore();
   const [copied, setCopied] = useState(false);
+  const [isDisconnectingCalendar, setIsDisconnectingCalendar] = useState(false);
 
   const { data: bookings = [] } = useQuery({ queryKey: ['bookings'], queryFn: getBookings });
   const { data: availability = [] } = useQuery({ queryKey: ['availability'], queryFn: getAvailability });
@@ -24,6 +26,21 @@ export default function DashboardPage() {
     navigator.clipboard.writeText(bookingLink);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
+  };
+
+  const connectCalendar = () => {
+    window.location.href = getGoogleCalendarConnectUrl();
+  };
+
+  const disconnectCalendar = async () => {
+    setIsDisconnectingCalendar(true);
+    try {
+      await disconnectGoogleCalendar();
+      const updatedUser = await getMe();
+      setUser(updatedUser);
+    } finally {
+      setIsDisconnectingCalendar(false);
+    }
   };
 
   return (
@@ -92,6 +109,36 @@ export default function DashboardPage() {
         </div>
 
         <div className="flex flex-col gap-4">
+          {/* Calendar sync */}
+          <div className="bg-bg-secondary border border-border-light rounded-xl p-4">
+            <div className="flex items-start justify-between gap-3">
+              <div className="min-w-0">
+                <h2 className="text-sm font-medium text-text-secondary mb-1">Calendar sync</h2>
+                {user?.calendarConnected ? (
+                  <p className="text-xs text-text-faint truncate">Connected as {user.calendarEmail || user.email}</p>
+                ) : (
+                  <p className="text-xs text-text-faint">Add confirmed bookings to your Google Calendar.</p>
+                )}
+              </div>
+              {user?.calendarConnected ? (
+                <button
+                  onClick={disconnectCalendar}
+                  disabled={isDisconnectingCalendar}
+                  className="text-[11px] bg-bg-tertiary border border-border-light rounded-md px-2.5 py-1.5 text-text-muted hover:text-danger disabled:opacity-60 transition-colors shrink-0"
+                >
+                  {isDisconnectingCalendar ? 'Disconnecting' : 'Disconnect'}
+                </button>
+              ) : (
+                <button
+                  onClick={connectCalendar}
+                  className="text-[11px] bg-accent rounded-md px-2.5 py-1.5 text-white hover:opacity-90 transition-opacity shrink-0"
+                >
+                  Connect
+                </button>
+              )}
+            </div>
+          </div>
+
           {/* Booking link */}
           <div className="bg-bg-secondary border border-border-light rounded-xl p-4">
             <h2 className="text-sm font-medium text-text-secondary mb-3">Your booking link</h2>

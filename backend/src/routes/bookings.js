@@ -4,8 +4,10 @@ const Booking = require('../models/Booking');
 const User = require('../models/User');
 const { authenticate } = require('../middleware/auth');
 const { sendBookingConfirmation, sendCancellationEmails } = require('../lib/email');
+const { createOwnerCalendarEvent, deleteOwnerCalendarEvent } = require('../lib/googleCalendar');
 
 const router = express.Router();
+const FRONTEND_URL = process.env.FRONTEND_URL;
 
 // POST /bookings - create a booking (public)
 router.post('/', async (req, res) => {
@@ -51,11 +53,31 @@ router.post('/', async (req, res) => {
       cancelToken,
     });
 
+    let calendarEventCreated = false;
+    const cancelLink = `${FRONTEND_URL}/cancel/${booking.cancelToken}`;
+
+    try {
+      const googleCalendarEventId = await createOwnerCalendarEvent({
+        booking,
+        owner,
+        cancelLink,
+      });
+
+      if (googleCalendarEventId) {
+        booking.googleCalendarEventId = googleCalendarEventId;
+        await booking.save();
+        calendarEventCreated = true;
+      }
+    } catch (err) {
+      console.error('Google Calendar create error:', err);
+    }
+
     // Send emails (non-blocking)
     sendBookingConfirmation({
       booking,
       ownerName: owner.name,
       ownerEmail: owner.email,
+      calendarEventCreated,
     }).catch(err => console.error('Email error:', err));
 
     res.status(201).json({ message: 'Booking confirmed', bookingId: booking._id });
@@ -84,15 +106,26 @@ router.patch('/:token/cancel', async (req, res) => {
       return res.status(400).json({ error: 'Booking is not active' });
     }
 
+    const owner = await User.findById(booking.ownerUserId);
+
+    if (owner && booking.googleCalendarEventId) {
+      try {
+        await deleteOwnerCalendarEvent({
+          owner,
+          eventId: booking.googleCalendarEventId,
+        });
+      } catch (err) {
+        console.error('Google Calendar delete error:', err);
+      }
+    }
+
     booking.status = 'cancelled';
     await booking.save();
 
-    const owner = await User.findById(booking.ownerUserId);
-
     sendCancellationEmails({
       booking,
-      ownerName: owner.name,
-      ownerEmail: owner.email,
+      ownerName: owner?.name || 'the owner',
+      ownerEmail: owner?.email,
     }).catch(err => console.error('Email error:', err));
 
     res.json({ message: 'Booking cancelled successfully' });

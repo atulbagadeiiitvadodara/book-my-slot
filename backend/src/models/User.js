@@ -7,6 +7,10 @@ const userSchema = new mongoose.Schema({
   avatar: { type: String, default: '' },
   timezone: { type: String, default: 'Asia/Kolkata' },
   publicSlug: { type: String, required: true, unique: true },
+  googleRefreshToken: { type: String, default: '' },
+  googleCalendarEmail: { type: String, default: '' },
+  googleCalendarEnabled: { type: Boolean, default: false },
+  googleCalendarConnectedAt: { type: Date },
   createdAt: { type: Date, default: Date.now },
 });
 

@@ -5,6 +5,8 @@ export interface User {
   avatar: string;
   timezone: string;
   publicSlug: string;
+  calendarConnected: boolean;
+  calendarEmail?: string;
 }
 
 export interface AvailabilityRecord {

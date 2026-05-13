@@ -27,6 +27,17 @@ passport.use(new GoogleStrategy({
   }
 }));
 
+passport.use('google-calendar', new GoogleStrategy({
+  clientID: process.env.GOOGLE_CLIENT_ID,
+  clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+  callbackURL: process.env.GOOGLE_CALENDAR_CALLBACK_URL || `${process.env.BACKEND_URL}/auth/google/calendar/callback`,
+}, (accessToken, refreshToken, profile, done) => {
+  return done(null, {
+    email: profile.emails?.[0]?.value || '',
+    refreshToken: refreshToken || '',
+  });
+}));
+
 async function generateUniqueSlug(name) {
   const base = name.toLowerCase().replace(/\s+/g, '').replace(/[^a-z0-9]/g, '').slice(0, 20);
   let slug = base;
