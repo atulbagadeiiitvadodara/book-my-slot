@@ -67,7 +67,7 @@ export default function CancelPage() {
       <div className="w-full max-w-sm">
         <div className="flex items-center gap-2 justify-center mb-6">
           <div className="w-7 h-7 bg-accent rounded-lg flex items-center justify-center text-white font-mono font-bold text-xs">S</div>
-          <span className="font-medium text-text-secondary text-sm">SlotSync</span>
+          <span className="font-medium text-text-secondary text-sm">BookMySlot</span>
         </div>
 
         <div className="bg-bg-secondary border border-border rounded-2xl p-6">

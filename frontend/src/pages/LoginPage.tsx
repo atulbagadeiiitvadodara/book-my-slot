@@ -34,7 +34,7 @@ export default function LoginPage() {
           <div className="w-10 h-10 bg-accent rounded-xl flex items-center justify-center">
             <span className="text-white font-mono font-bold text-lg">S</span>
           </div>
-          <span className="font-sans font-medium text-text-primary text-xl">SlotSync</span>
+          <span className="font-sans font-medium text-text-primary text-xl">BookMySlot</span>
         </div>
 
         {/* Card */}

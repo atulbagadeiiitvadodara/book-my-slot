@@ -2,7 +2,7 @@ const { Resend } = require('resend');
 const { toZonedTime, format } = require('date-fns-tz');
 
 const resend = new Resend(process.env.RESEND_API_KEY);
-const FROM = process.env.EMAIL_FROM || 'noreply@slotsync.app';
+const FROM = process.env.EMAIL_FROM;
 const FRONTEND_URL = process.env.FRONTEND_URL;
 
 function formatDT(utcDate, timezone) {

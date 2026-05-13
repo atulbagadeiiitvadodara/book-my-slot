@@ -24,7 +24,7 @@ export default function DashboardLayout() {
       <aside className="w-52 bg-[#0f1219] border-r border-border-light flex flex-col shrink-0">
         <div className="flex items-center gap-2 px-4 py-4 border-b border-border-light">
           <div className="w-7 h-7 bg-accent rounded-lg flex items-center justify-center text-white text-xs font-mono font-bold">S</div>
-          <span className="font-sans font-medium text-text-primary text-sm">SlotSync</span>
+          <span className="font-sans font-medium text-text-primary text-sm">BookMySlot</span>
         </div>
 
         <nav className="flex-1 py-3">

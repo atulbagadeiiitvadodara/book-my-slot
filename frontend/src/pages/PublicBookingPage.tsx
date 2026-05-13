@@ -123,7 +123,7 @@ export default function PublicBookingPage() {
         {/* Logo */}
         <div className="flex items-center gap-2 mb-6">
           <div className="w-7 h-7 bg-accent rounded-lg flex items-center justify-center text-white font-mono font-bold text-xs">S</div>
-          <span className="font-medium text-text-secondary text-sm">SlotSync</span>
+          <span className="font-medium text-text-secondary text-sm">BookMySlot</span>
         </div>
 
         <div className="grid md:grid-cols-[220px_1fr] gap-4">
