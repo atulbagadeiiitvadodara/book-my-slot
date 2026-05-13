@@ -1,5 +1,9 @@
 {
   "rewrites": [
+    {
+      "source": "/api/:path*",
+      "destination": "https://book-my-slot-backend-7sv3.onrender.com/:path*"
+    },
     { "source": "/(.*)", "destination": "/index.html" }
   ]
 }

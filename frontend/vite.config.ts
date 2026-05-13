@@ -5,9 +5,12 @@ export default defineConfig({
   plugins: [react()],
   server: {
     proxy: {
-      '/auth': 'http://localhost:4000',
-      '/availability': 'http://localhost:4000',
-      '/bookings': 'http://localhost:4000',
-    }
-  }
+      '/api': {
+        target: 'http://localhost:4000',
+        changeOrigin: true,
+        secure: false,
+        rewrite: (path) => path.replace(/^\/api/, ''),
+      },
+    },
+  },
 })

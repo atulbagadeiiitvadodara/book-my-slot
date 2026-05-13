@@ -11,6 +11,6 @@ export const logout = async (): Promise<void> => {
 };
 
 export const getGoogleAuthUrl = (): string => {
-  const base = import.meta.env.VITE_API_BASE_URL || '';
+  const base = import.meta.env.VITE_API_BASE_URL || '/api';
   return `${base}/auth/google`;
 };
