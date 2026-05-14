@@ -73,7 +73,7 @@ export default function DashboardLayout() {
       </aside>
 
       {/* Main */}
-      <main className="flex-1 overflow-auto pb-20 md:pb-0">
+      <main className="min-w-0 flex-1 overflow-x-hidden overflow-y-auto pb-20 md:pb-0">
         <header className="flex items-center justify-between bg-[#0f1219] border-b border-border-light px-4 py-3 md:hidden">
           <div className="flex items-center gap-2 min-w-0">
             <div className="w-7 h-7 bg-accent rounded-lg flex items-center justify-center text-white text-xs font-mono font-bold shrink-0">S</div>

@@ -44,7 +44,7 @@ export default function DashboardPage() {
   };
 
   return (
-    <div className="p-4 md:p-6 max-w-5xl">
+    <div className="w-full max-w-full overflow-x-hidden p-4 md:max-w-5xl md:p-6">
       {/* Header */}
       <div className="flex items-start justify-between mb-5 md:mb-6">
         <div>
@@ -54,22 +54,22 @@ export default function DashboardPage() {
       </div>
 
       {/* Stats */}
-      <div className="grid grid-cols-3 gap-2 md:gap-3 mb-4 md:mb-5">
+      <div className="grid w-full max-w-full grid-cols-3 gap-2 md:gap-3 mb-4 md:mb-5">
         {[
           { label: 'Total', val: bookings.length },
           { label: 'Upcoming', val: upcoming.length },
           { label: 'Confirmed', val: confirmed.length },
         ].map(s => (
-          <div key={s.label} className="bg-bg-secondary border border-border-light rounded-xl p-3 md:p-4">
+          <div key={s.label} className="min-w-0 bg-bg-secondary border border-border-light rounded-xl p-3 md:p-4">
             <p className="text-[11px] md:text-xs text-text-faint mb-1 truncate">{s.label}</p>
             <p className="text-2xl font-medium text-text-primary font-mono">{s.val}</p>
           </div>
         ))}
       </div>
 
-      <div className="grid gap-4 lg:grid-cols-2">
+      <div className="grid w-full max-w-full gap-4 lg:grid-cols-2">
         {/* Availability summary */}
-        <div className="bg-bg-secondary border border-border-light rounded-xl p-4">
+        <div className="min-w-0 overflow-hidden bg-bg-secondary border border-border-light rounded-xl p-4">
           <div className="flex items-center justify-between mb-3">
             <h2 className="text-sm font-medium text-text-secondary">Weekly availability</h2>
             <Link to="/dashboard/availability" className="text-xs text-accent hover:underline">Edit</Link>
@@ -77,21 +77,21 @@ export default function DashboardPage() {
           {availability.length === 0 ? (
             <p className="text-xs text-text-faint py-2">No availability set yet. <Link to="/dashboard/availability" className="text-accent hover:underline">Set it up →</Link></p>
           ) : (
-            <div className="space-y-1.5">
+            <div className="space-y-2 md:space-y-1.5">
               {WEEKDAYS.map((day, idx) => {
                 const a = availability.find(av => av.weekday === idx);
                 return (
-                  <div key={day} className="flex items-center gap-2 text-xs">
-                    <span className="text-text-faint w-8">{day}</span>
+                  <div key={day} className="grid grid-cols-[28px_minmax(0,1fr)_74px] items-center gap-2 text-xs md:grid-cols-[32px_minmax(0,1fr)_82px]">
+                    <span className="text-text-faint">{day}</span>
                     {a ? (
                       <>
-                        <span className="flex-1 h-1.5 bg-bg-tertiary rounded-full overflow-hidden">
+                        <span className="min-w-0 h-1.5 bg-bg-tertiary rounded-full overflow-hidden">
                           <span className="block h-full bg-accent rounded-full" style={{ width: '70%' }} />
                         </span>
-                        <span className="text-text-muted font-mono text-[11px] shrink-0">{a.startTime}–{a.endTime}</span>
+                        <span className="text-right text-text-muted font-mono text-[10px] md:text-[11px] truncate">{a.startTime}–{a.endTime}</span>
                       </>
                     ) : (
-                      <span className="text-[#2a3045] flex-1 text-[11px]">unavailable</span>
+                      <span className="col-span-2 min-w-0 text-[#2a3045] text-[11px] truncate">unavailable</span>
                     )}
                   </div>
                 );
@@ -99,8 +99,8 @@ export default function DashboardPage() {
             </div>
           )}
           {availability[0] && (
-            <div className="mt-3 pt-3 border-t border-border-light flex items-center gap-2">
-              <span className="text-[11px] text-text-faint">Slot duration</span>
+            <div className="mt-3 pt-3 border-t border-border-light flex min-w-0 items-center gap-2">
+              <span className="text-[11px] text-text-faint shrink-0">Slot duration</span>
               <span className="text-[11px] bg-bg-tertiary border border-border-light rounded-md px-2 py-0.5 text-text-muted font-mono">
                 {availability[0].slotDuration} min
               </span>
@@ -108,14 +108,14 @@ export default function DashboardPage() {
           )}
         </div>
 
-        <div className="flex flex-col gap-4">
+        <div className="min-w-0 flex flex-col gap-4">
           {/* Calendar sync */}
-          <div className="bg-bg-secondary border border-border-light rounded-xl p-4">
-            <div className="flex items-start justify-between gap-3">
-              <div className="min-w-0">
+          <div className="min-w-0 overflow-hidden bg-bg-secondary border border-border-light rounded-xl p-4">
+            <div className="grid gap-3 sm:flex sm:items-start sm:justify-between">
+              <div className="min-w-0 overflow-hidden">
                 <h2 className="text-sm font-medium text-text-secondary mb-1">Calendar sync</h2>
                 {user?.calendarConnected ? (
-                  <p className="text-xs text-text-faint truncate">Connected as {user.calendarEmail || user.email}</p>
+                  <p className="max-w-full text-xs text-text-faint truncate">Connected as {user.calendarEmail || user.email}</p>
                 ) : (
                   <p className="text-xs text-text-faint">Add confirmed bookings to your Google Calendar.</p>
                 )}
@@ -124,14 +124,14 @@ export default function DashboardPage() {
                 <button
                   onClick={disconnectCalendar}
                   disabled={isDisconnectingCalendar}
-                  className="text-[11px] bg-bg-tertiary border border-border-light rounded-md px-2.5 py-1.5 text-text-muted hover:text-danger disabled:opacity-60 transition-colors shrink-0"
+                  className="justify-self-start text-[11px] bg-bg-tertiary border border-border-light rounded-md px-2.5 py-1.5 text-text-muted hover:text-danger disabled:opacity-60 transition-colors shrink-0"
                 >
                   {isDisconnectingCalendar ? 'Disconnecting' : 'Disconnect'}
                 </button>
               ) : (
                 <button
                   onClick={connectCalendar}
-                  className="text-[11px] bg-accent rounded-md px-2.5 py-1.5 text-white hover:opacity-90 transition-opacity shrink-0"
+                  className="justify-self-start text-[11px] bg-accent rounded-md px-2.5 py-1.5 text-white hover:opacity-90 transition-opacity shrink-0"
                 >
                   Connect
                 </button>
@@ -140,10 +140,10 @@ export default function DashboardPage() {
           </div>
 
           {/* Booking link */}
-          <div className="bg-bg-secondary border border-border-light rounded-xl p-4">
+          <div className="min-w-0 overflow-hidden bg-bg-secondary border border-border-light rounded-xl p-4">
             <h2 className="text-sm font-medium text-text-secondary mb-3">Your booking link</h2>
-            <div className="flex items-center gap-2 bg-bg-tertiary border border-border-light rounded-lg px-3 py-2">
-              <span className="text-xs text-accent font-mono flex-1 truncate">{bookingLink}</span>
+            <div className="flex min-w-0 max-w-full items-center gap-2 overflow-hidden bg-bg-tertiary border border-border-light rounded-lg px-3 py-2">
+              <span className="min-w-0 flex-1 truncate text-xs text-accent font-mono">{bookingLink}</span>
               <button
                 onClick={copyLink}
                 className="text-[11px] bg-bg-secondary border border-border rounded-md px-2 py-1 text-text-muted hover:text-text-secondary transition-colors shrink-0"
@@ -154,7 +154,7 @@ export default function DashboardPage() {
           </div>
 
           {/* Upcoming bookings */}
-          <div className="bg-bg-secondary border border-border-light rounded-xl p-4 flex-1">
+          <div className="min-w-0 overflow-hidden bg-bg-secondary border border-border-light rounded-xl p-4 flex-1">
             <div className="flex items-center justify-between mb-3">
               <h2 className="text-sm font-medium text-text-secondary">Upcoming bookings</h2>
               <Link to="/dashboard/bookings" className="text-xs text-accent hover:underline">View all</Link>
@@ -166,12 +166,12 @@ export default function DashboardPage() {
                 {upcoming.slice(0, 5).map(b => {
                   const dt = toZonedTime(parseISO(b.startTimeUTC), user?.timezone || 'UTC');
                   return (
-                    <div key={b._id} className="flex items-center gap-2 text-xs">
+                    <div key={b._id} className="grid grid-cols-[8px_minmax(0,92px)_minmax(0,1fr)] items-center gap-2 text-xs md:grid-cols-[8px_96px_minmax(0,1fr)]">
                       <div className="w-1.5 h-1.5 rounded-full bg-success shrink-0" />
-                      <span className="text-text-faint font-mono w-24 shrink-0">
+                      <span className="min-w-0 text-text-faint font-mono truncate">
                         {format(dt, 'MMM d · h:mm a')}
                       </span>
-                      <span className="text-text-secondary truncate">{b.bookedByName}</span>
+                      <span className="min-w-0 text-text-secondary truncate">{b.bookedByName}</span>
                     </div>
                   );
                 })}
