@@ -110,7 +110,7 @@ export default function PublicBookingPage() {
   );
 
   return (
-    <div className="min-h-screen bg-bg-primary py-8 px-4">
+    <div className="min-h-screen bg-bg-primary px-4 py-4 md:py-8">
       <div
         className="fixed inset-0 opacity-[0.02] pointer-events-none"
         style={{
@@ -121,42 +121,46 @@ export default function PublicBookingPage() {
 
       <div className="max-w-3xl mx-auto relative z-10">
         {/* Logo */}
-        <div className="flex items-center gap-2 mb-6">
+        <div className="flex items-center gap-2 mb-4 md:mb-6">
           <div className="w-7 h-7 bg-accent rounded-lg flex items-center justify-center text-white font-mono font-bold text-xs">S</div>
           <span className="font-medium text-text-secondary text-sm">BookMySlot</span>
         </div>
 
         <div className="grid md:grid-cols-[220px_1fr] gap-4">
           {/* Profile */}
-          <div className="bg-bg-secondary border border-border-light rounded-2xl p-5">
-            {profile.avatar ? (
-              <img src={profile.avatar} alt={profile.name} className="w-14 h-14 rounded-full mb-3" />
-            ) : (
-              <div className="w-14 h-14 rounded-full bg-accent flex items-center justify-center text-white text-xl font-medium mb-3">
-                {profile.name[0]}
-              </div>
-            )}
-            <h1 className="text-base font-medium text-text-primary">{profile.name}</h1>
-            <p className="text-xs text-accent mb-3">@{slug}</p>
-
-            <div className="space-y-2 text-xs text-text-muted">
-              <div className="flex items-center gap-2">
-                <span className="text-text-faint">⏱</span>
-                <span>
-                  {profile.availability?.[0]?.slotDuration || 30} min meeting
-                </span>
-              </div>
-              <div className="flex items-center gap-2">
-                <span className="text-text-faint">🌐</span>
-                <span>Showing in your timezone</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <span className="text-text-faint">📍</span>
-                <span className="text-[11px] text-text-faint">{timezone}</span>
+          <div className="bg-bg-secondary border border-border-light rounded-2xl p-4 md:p-5">
+            <div className="flex items-center gap-3 md:block">
+              {profile.avatar ? (
+                <img src={profile.avatar} alt={profile.name} className="w-12 h-12 md:w-14 md:h-14 rounded-full md:mb-3" />
+              ) : (
+                <div className="w-12 h-12 md:w-14 md:h-14 rounded-full bg-accent flex items-center justify-center text-white text-xl font-medium md:mb-3 shrink-0">
+                  {profile.name[0]}
+                </div>
+              )}
+              <div className="min-w-0">
+                <h1 className="text-base font-medium text-text-primary truncate">{profile.name}</h1>
+                <p className="text-xs text-accent md:mb-3">@{slug}</p>
               </div>
             </div>
 
-            <div className="mt-4 pt-4 border-t border-border-light text-xs text-text-faint leading-relaxed">
+            <div className="grid grid-cols-3 gap-2 mt-4 text-xs text-text-muted md:block md:space-y-2 md:mt-0">
+              <div className="bg-bg-tertiary border border-border-light rounded-xl p-2 md:bg-transparent md:border-0 md:rounded-none md:p-0 flex flex-col gap-1 md:flex-row md:items-center md:gap-2">
+                <span className="text-text-faint">⏱</span>
+                <span className="leading-tight">
+                  {profile.availability?.[0]?.slotDuration || 30} min meeting
+                </span>
+              </div>
+              <div className="bg-bg-tertiary border border-border-light rounded-xl p-2 md:bg-transparent md:border-0 md:rounded-none md:p-0 flex flex-col gap-1 md:flex-row md:items-center md:gap-2">
+                <span className="text-text-faint">🌐</span>
+                <span className="leading-tight">Your timezone</span>
+              </div>
+              <div className="bg-bg-tertiary border border-border-light rounded-xl p-2 md:bg-transparent md:border-0 md:rounded-none md:p-0 flex flex-col gap-1 md:flex-row md:items-center md:gap-2 min-w-0">
+                <span className="text-text-faint">📍</span>
+                <span className="text-[11px] text-text-faint truncate">{timezone}</span>
+              </div>
+            </div>
+
+            <div className="hidden md:block mt-4 pt-4 border-t border-border-light text-xs text-text-faint leading-relaxed">
               Book a slot and receive a confirmation email with a cancellation link.
             </div>
           </div>
@@ -169,7 +173,7 @@ export default function PublicBookingPage() {
                 <button
                   onClick={() => { setWeekOffset(w => Math.max(0, w - 1)); setSelectedDate(null); setSelectedSlot(null); }}
                   disabled={weekOffset === 0}
-                  className="text-xs px-3 py-1.5 bg-bg-tertiary border border-border rounded-lg text-text-muted hover:text-text-secondary disabled:opacity-30 transition-colors"
+                  className="h-8 w-8 md:h-auto md:w-auto text-xs md:px-3 md:py-1.5 bg-bg-tertiary border border-border rounded-lg text-text-muted hover:text-text-secondary disabled:opacity-30 transition-colors"
                 >
                   ←
                 </button>
@@ -178,7 +182,7 @@ export default function PublicBookingPage() {
                 </span>
                 <button
                   onClick={() => { setWeekOffset(w => w + 1); setSelectedDate(null); setSelectedSlot(null); }}
-                  className="text-xs px-3 py-1.5 bg-bg-tertiary border border-border rounded-lg text-text-muted hover:text-text-secondary transition-colors"
+                  className="h-8 w-8 md:h-auto md:w-auto text-xs md:px-3 md:py-1.5 bg-bg-tertiary border border-border rounded-lg text-text-muted hover:text-text-secondary transition-colors"
                 >
                   →
                 </button>
@@ -202,7 +206,7 @@ export default function PublicBookingPage() {
                       key={dateStr}
                       disabled={!avail}
                       onClick={() => { setSelectedDate(dateStr); setSelectedSlot(null); }}
-                      className={`rounded-lg py-2 text-xs transition-colors ${
+                      className={`min-h-9 rounded-lg py-2 text-xs transition-colors ${
                         sel
                           ? 'bg-accent text-white font-medium'
                           : avail
@@ -228,14 +232,14 @@ export default function PublicBookingPage() {
                 ) : slots.length === 0 ? (
                   <div className="text-text-faint text-xs">No slots available for this day.</div>
                 ) : (
-                  <div className="grid grid-cols-4 gap-2">
+                  <div className="grid grid-cols-3 gap-2 sm:grid-cols-4">
                     {slots.map(slot => {
                       const sel = selectedSlot?.startUTC === slot.startUTC;
                       return (
                         <button
                           key={slot.startUTC}
                           onClick={() => setSelectedSlot(slot)}
-                          className={`py-2 rounded-lg text-xs font-mono transition-colors ${
+                          className={`min-h-10 py-2 rounded-lg text-xs font-mono transition-colors ${
                             sel
                               ? 'bg-accent text-white'
                               : 'bg-bg-tertiary border border-border-light text-text-secondary hover:border-accent'
@@ -253,16 +257,16 @@ export default function PublicBookingPage() {
             {/* Booking form */}
             {selectedSlot && (
               <div className="bg-bg-secondary border border-[#3040a0] rounded-2xl p-4">
-                <div className="flex items-center justify-between mb-3">
+                <div className="flex items-center justify-between gap-3 mb-3">
                   <h2 className="text-sm font-medium text-text-primary">Confirm your booking</h2>
-                  <button onClick={() => setSelectedSlot(null)} className="text-text-faint hover:text-text-muted text-xs">
+                  <button onClick={() => setSelectedSlot(null)} className="text-text-faint hover:text-text-muted text-xs shrink-0">
                     ✕ Clear
                   </button>
                 </div>
 
                 <div className="bg-bg-tertiary border border-border-light rounded-lg px-3 py-2 mb-3 flex items-center gap-2 text-xs">
                   <span className="text-text-faint">⏰</span>
-                  <span className="text-accent font-mono">
+                  <span className="text-accent font-mono truncate">
                     {selectedDate && format(parseISO(selectedDate), 'MMM d')} · {selectedSlot.startLocal} – {selectedSlot.endLocal}
                   </span>
                 </div>
@@ -275,7 +279,7 @@ export default function PublicBookingPage() {
                       placeholder="Jane Smith"
                       value={form.name}
                       onChange={e => setForm(f => ({ ...f, name: e.target.value }))}
-                      className="w-full bg-bg-primary border border-border rounded-lg px-3 py-2 text-sm text-text-secondary placeholder-text-faint focus:border-accent transition-colors"
+                      className="w-full bg-bg-primary border border-border rounded-lg px-3 py-2.5 md:py-2 text-sm text-text-secondary placeholder-text-faint focus:border-accent transition-colors"
                     />
                   </div>
                   <div>
@@ -285,7 +289,7 @@ export default function PublicBookingPage() {
                       placeholder="jane@example.com"
                       value={form.email}
                       onChange={e => setForm(f => ({ ...f, email: e.target.value }))}
-                      className="w-full bg-bg-primary border border-border rounded-lg px-3 py-2 text-sm text-text-secondary placeholder-text-faint focus:border-accent transition-colors"
+                      className="w-full bg-bg-primary border border-border rounded-lg px-3 py-2.5 md:py-2 text-sm text-text-secondary placeholder-text-faint focus:border-accent transition-colors"
                     />
                   </div>
                   <div>
@@ -294,7 +298,7 @@ export default function PublicBookingPage() {
                       placeholder="What would you like to discuss?"
                       value={form.reason}
                       onChange={e => setForm(f => ({ ...f, reason: e.target.value }))}
-                      rows={2}
+                      rows={3}
                       className="w-full bg-bg-primary border border-border rounded-lg px-3 py-2 text-sm text-text-secondary placeholder-text-faint focus:border-accent transition-colors resize-none"
                     />
                   </div>

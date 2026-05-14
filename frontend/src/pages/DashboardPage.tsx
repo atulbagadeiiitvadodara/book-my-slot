@@ -44,9 +44,9 @@ export default function DashboardPage() {
   };
 
   return (
-    <div className="p-6 max-w-5xl">
+    <div className="p-4 md:p-6 max-w-5xl">
       {/* Header */}
-      <div className="flex items-start justify-between mb-6">
+      <div className="flex items-start justify-between mb-5 md:mb-6">
         <div>
           <h1 className="text-xl font-medium text-text-primary">Dashboard</h1>
           <p className="text-sm text-text-faint mt-0.5">{user?.timezone}</p>
@@ -54,20 +54,20 @@ export default function DashboardPage() {
       </div>
 
       {/* Stats */}
-      <div className="grid grid-cols-3 gap-3 mb-5">
+      <div className="grid grid-cols-3 gap-2 md:gap-3 mb-4 md:mb-5">
         {[
-          { label: 'Total bookings', val: bookings.length },
+          { label: 'Total', val: bookings.length },
           { label: 'Upcoming', val: upcoming.length },
           { label: 'Confirmed', val: confirmed.length },
         ].map(s => (
-          <div key={s.label} className="bg-bg-secondary border border-border-light rounded-xl p-4">
-            <p className="text-xs text-text-faint mb-1">{s.label}</p>
+          <div key={s.label} className="bg-bg-secondary border border-border-light rounded-xl p-3 md:p-4">
+            <p className="text-[11px] md:text-xs text-text-faint mb-1 truncate">{s.label}</p>
             <p className="text-2xl font-medium text-text-primary font-mono">{s.val}</p>
           </div>
         ))}
       </div>
 
-      <div className="grid grid-cols-2 gap-4">
+      <div className="grid gap-4 lg:grid-cols-2">
         {/* Availability summary */}
         <div className="bg-bg-secondary border border-border-light rounded-xl p-4">
           <div className="flex items-center justify-between mb-3">
@@ -88,7 +88,7 @@ export default function DashboardPage() {
                         <span className="flex-1 h-1.5 bg-bg-tertiary rounded-full overflow-hidden">
                           <span className="block h-full bg-accent rounded-full" style={{ width: '70%' }} />
                         </span>
-                        <span className="text-text-muted font-mono text-[11px]">{a.startTime}–{a.endTime}</span>
+                        <span className="text-text-muted font-mono text-[11px] shrink-0">{a.startTime}–{a.endTime}</span>
                       </>
                     ) : (
                       <span className="text-[#2a3045] flex-1 text-[11px]">unavailable</span>

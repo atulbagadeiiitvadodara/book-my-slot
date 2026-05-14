@@ -64,7 +64,7 @@ export default function AvailabilityPage() {
   };
 
   if (isLoading) return (
-    <div className="p-6">
+    <div className="p-4 md:p-6">
       <div className="text-text-muted text-sm">Loading...</div>
     </div>
   );
@@ -74,21 +74,21 @@ export default function AvailabilityPage() {
   const globalDuration = firstActive?.slotDuration ?? 30;
 
   return (
-    <div className="p-6 max-w-2xl">
-      <div className="mb-6">
+    <div className="p-4 md:p-6 max-w-2xl">
+      <div className="mb-5 md:mb-6">
         <h1 className="text-xl font-medium text-text-primary">Availability</h1>
         <p className="text-sm text-text-faint mt-0.5">Set your weekly schedule for bookings.</p>
       </div>
 
       {/* Timezone + Duration */}
       <div className="bg-bg-secondary border border-border-light rounded-xl p-4 mb-4">
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid gap-4 md:grid-cols-2">
           <div>
             <label className="text-xs text-text-faint block mb-1.5">Your timezone</label>
             <select
               value={timezone}
               onChange={e => setTimezone(e.target.value)}
-              className="w-full bg-bg-primary border border-border rounded-lg px-3 py-2 text-sm text-text-secondary focus:border-accent transition-colors"
+              className="w-full bg-bg-primary border border-border rounded-lg px-3 py-2.5 md:py-2 text-sm text-text-secondary focus:border-accent transition-colors"
             >
               {TIMEZONES.map(tz => <option key={tz} value={tz}>{tz}</option>)}
             </select>
@@ -124,36 +124,38 @@ export default function AvailabilityPage() {
         {WEEKDAYS.map((name, idx) => {
           const a = days[idx];
           return (
-            <div key={name} className={`flex items-center gap-4 px-4 py-3 ${idx < 6 ? 'border-b border-border-light' : ''}`}>
+            <div key={name} className={`grid grid-cols-[40px_1fr] md:flex md:items-center gap-3 md:gap-4 px-4 py-3 ${idx < 6 ? 'border-b border-border-light' : ''}`}>
               {/* Toggle */}
               <button
                 onClick={() => toggleDay(idx)}
-                className={`w-10 h-5 rounded-full transition-colors relative flex-shrink-0 ${a ? 'bg-accent' : 'bg-bg-tertiary border border-border'}`}
+                className={`w-10 h-5 rounded-full transition-colors relative flex-shrink-0 mt-0.5 md:mt-0 ${a ? 'bg-accent' : 'bg-bg-tertiary border border-border'}`}
               >
                 <span className={`absolute top-0.5 w-4 h-4 bg-white rounded-full transition-all shadow ${a ? 'right-0.5' : 'left-0.5'}`} />
               </button>
 
-              <span className={`text-sm w-24 ${a ? 'text-text-secondary' : 'text-text-faint'}`}>{name}</span>
+              <div className="min-w-0 md:flex md:items-center md:gap-4 md:flex-1">
+                <span className={`block text-sm md:w-24 ${a ? 'text-text-secondary' : 'text-text-faint'}`}>{name}</span>
 
-              {a ? (
-                <div className="flex items-center gap-2 flex-1">
-                  <input
-                    type="time"
-                    value={a.startTime}
-                    onChange={e => updateDay(idx, 'startTime', e.target.value)}
-                    className="bg-bg-primary border border-border rounded-lg px-3 py-1.5 text-sm text-text-secondary font-mono focus:border-accent transition-colors"
-                  />
-                  <span className="text-text-faint text-xs">to</span>
-                  <input
-                    type="time"
-                    value={a.endTime}
-                    onChange={e => updateDay(idx, 'endTime', e.target.value)}
-                    className="bg-bg-primary border border-border rounded-lg px-3 py-1.5 text-sm text-text-secondary font-mono focus:border-accent transition-colors"
-                  />
-                </div>
-              ) : (
-                <span className="text-xs text-[#2a3045] flex-1">Unavailable</span>
-              )}
+                {a ? (
+                  <div className="grid grid-cols-[1fr_auto_1fr] items-center gap-2 flex-1 mt-2 md:mt-0">
+                    <input
+                      type="time"
+                      value={a.startTime}
+                      onChange={e => updateDay(idx, 'startTime', e.target.value)}
+                      className="w-full bg-bg-primary border border-border rounded-lg px-3 py-2 md:py-1.5 text-sm text-text-secondary font-mono focus:border-accent transition-colors"
+                    />
+                    <span className="text-text-faint text-xs">to</span>
+                    <input
+                      type="time"
+                      value={a.endTime}
+                      onChange={e => updateDay(idx, 'endTime', e.target.value)}
+                      className="w-full bg-bg-primary border border-border rounded-lg px-3 py-2 md:py-1.5 text-sm text-text-secondary font-mono focus:border-accent transition-colors"
+                    />
+                  </div>
+                ) : (
+                  <span className="block text-xs text-[#2a3045] flex-1 mt-1 md:mt-0">Unavailable</span>
+                )}
+              </div>
             </div>
           );
         })}
@@ -162,7 +164,7 @@ export default function AvailabilityPage() {
       <button
         onClick={handleSave}
         disabled={mutation.isPending}
-        className="bg-accent hover:bg-accent-hover text-white rounded-xl px-6 py-2.5 text-sm font-medium transition-colors disabled:opacity-50"
+        className="w-full md:w-auto bg-accent hover:bg-accent-hover text-white rounded-xl px-6 py-3 md:py-2.5 text-sm font-medium transition-colors disabled:opacity-50"
       >
         {mutation.isPending ? 'Saving...' : saved ? '✓ Saved!' : 'Save availability'}
       </button>
